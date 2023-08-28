@@ -39,10 +39,9 @@ class _HomePageState extends State<HomePage> {
 
   void saveNestedTodo(int i) {
     setState(() {
-      db.todoList[i].tiles.add((BasicTile(
-          title: _nestController.text,
-          isDone: false,
-          tiles: [])));
+      db.todoList[i].tiles.add(
+          (BasicTile(title: _nestController.text, isDone: false, tiles: [])));
+      _nestController.clear();
     });
     db.updateDb();
     Navigator.pop(context);
@@ -55,6 +54,7 @@ class _HomePageState extends State<HomePage> {
           return NestedModalBox(
               //nested dialog box component is reuquired (add new task to ${todoList[i].title})
               controller: _nestController,
+              tileTitle: db.todoList[i].title,
               onCancel: () => Navigator.of(context).pop(),
               onSave: () {
                 saveNestedTodo(i);
@@ -82,22 +82,54 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: createNewTask, child: const Icon(Icons.add)),
-        body: ListView(
-          children: db.todoList.map(buildTile).toList(),
+        body: Column(
+          children: <Widget>[
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                children: db.todoList.map(buildTile).toList(),
+              ),
+            ),
+          ],
         ));
   }
 
-//Convert this component into ListTile later
+//child kontrol değişkeni (floating buttondan açılyırsa false), aksi halde true değerle oluşturulacak.
+//hivedb id atama (1dedn başalyarak sıralı şekilde artacak)
+//child ise "child-$id" şeklinde bir değer tutacak
+//tek bir mapleme olacak, child ise padding left değilse sola yaslanmış olarak görüntülenecek
 
   Widget buildTile(BasicTile tile) {
     int index1 = db.todoList.indexOf(tile);
-    return (ExpansionTile(
+    return (Column(
+      children: [
+        ListTile(
+          title: Text(tile.title),
+          trailing: IconButton(
+              onPressed: () {
+                createNestedTodo(index1);
+              },
+              icon: const Icon(
+                Icons.add,
+                color: Colors.green,
+              )),
+        ),
+      ],
+    ));
+  }
+
+  Widget buildNestedList(BasicTile tile) {
+    int index1 = db.todoList.indexOf(tile);
+    return (ListView.builder(itemBuilder: (builder, context) {
+      ListTile(
         title: Text(tile.title),
         trailing: IconButton(
-          onPressed: (){
+          onPressed: () {
             createNestedTodo(index1);
-          }, 
-          icon: const Icon(Icons.add, color: Colors.green,)),
-        children: tile.tiles.map((e) => buildTile(e)).toList()));
+          },
+          icon: const Icon(Icons.add),
+        ),
+      );
+    }));
   }
 }

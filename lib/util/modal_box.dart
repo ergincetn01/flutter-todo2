@@ -15,6 +15,7 @@ class ModalBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      title: const Text("Add new task"),
       backgroundColor: Colors.white,
       content: SizedBox(
           height: 120,
