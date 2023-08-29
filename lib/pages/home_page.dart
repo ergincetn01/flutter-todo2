@@ -4,6 +4,7 @@ import 'package:todo2/data/database.dart';
 import 'package:todo2/util/basic_tile.dart';
 import 'package:todo2/util/modal_box.dart';
 import 'package:todo2/util/nested_modal_box.dart';
+import 'package:todo2/util/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -46,7 +47,10 @@ class _HomePageState extends State<HomePage> {
     db.updateDb();
     Navigator.pop(context);
   }
-
+void handleCancel(){
+  Navigator.of(context).pop();
+  _controller.clear();
+}
   void createNestedTodo(int i) {
     showDialog(
         context: context,
@@ -55,7 +59,7 @@ class _HomePageState extends State<HomePage> {
               //nested dialog box component is reuquired (add new task to ${todoList[i].title})
               controller: _nestController,
               tileTitle: db.todoList[i].title,
-              onCancel: () => Navigator.of(context).pop(),
+              onCancel: () => handleCancel(),
               onSave: () {
                 saveNestedTodo(i);
               });
@@ -69,58 +73,52 @@ class _HomePageState extends State<HomePage> {
           return ModalBox(
               controller: _controller,
               onSave: saveNewTodo,
-              onCancel: () => Navigator.of(context).pop());
+              onCancel: () => handleCancel());
         });
+  }
+
+  void checkboxChanged(bool? value, int index) {
+    setState(() {
+      db.todoList[index].isDone = !db.todoList[index].isDone;
+    });
+    db.updateDb();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Todo app with Children"),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Todo app with Children"),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: createNewTask, child: const Icon(Icons.add)),
+            onPressed: createNewTask, child: const Icon(Icons.add)),
         body: Column(
           children: <Widget>[
             Flexible(
-            child: ListView.builder(
-              itemCount: db.todoList.length,
-              itemBuilder: (BuildContext context, index) {
-                return Padding(
-                  padding: db.todoList[index].isChild
-                    ? const EdgeInsets.only(left: 15.0)
-                    : EdgeInsets.zero,
-                  child: ListTile(
-                  title: Text(db.todoList[index].title),
-                  trailing: IconButton(
-                  onPressed: () {
-                    createNestedTodo(index);
-                  },
-                  icon: const Icon(Icons.add,
-                    color: Colors.green,
-                  )),
-                  ),
-                );
-              },
+              child: ListView.builder(
+                itemCount: db.todoList.length,
+                itemBuilder: (BuildContext context, index) {
+                  return TodoTile(
+                      taskName: db.todoList[index].title,
+                      isChild: db.todoList[index].isChild,
+                      createChild: () {
+                        createNestedTodo(index);
+                      },
+                      isCompleted: db.todoList[index].isDone,
+                      onChanged: (value) => checkboxChanged(value, index),
+                     deleteTask: (p0)=>
+                      deleteTask(index),
+                     );
+                },
+              ),
             ),
-          ),
-        ],
-      ));
+          ],
+        ));
   }
 
 //hivedb id atama (1dedn başalyarak sıralı şekilde artacak)
 //child ise "child-$id" şeklinde bir değer tutacak
-
-// Widget buildList(BasicTile tile){
-
-//   return(ListView.builder(itemBuilder: (context, index) {
-//       ListTile(
-//         leading: Icon(Icons.arrow_right),
-//         title: Text(tile.title));
-//   },));
-// }
 
   Widget buildTile(BasicTile tile) {
     int index1 = db.todoList.indexOf(tile);
@@ -140,6 +138,10 @@ class _HomePageState extends State<HomePage> {
                   Icons.add,
                   color: Colors.green,
                 )),
+            leading: Checkbox(
+              onChanged: (value) => checkboxChanged(value, index1),
+              value: db.todoList[index1].isDone,
+            ),
           ),
         ),
       ],

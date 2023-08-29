@@ -2,11 +2,11 @@ import 'package:hive/hive.dart';
 
 class BasicTile {
   final String title;
-  final bool isDone;
+  late bool isDone;
   final bool isChild;
   // final List<BasicTile> tiles;
 
-  const BasicTile(
+  BasicTile(
       {required this.title, required this.isDone, required this.isChild});
 }
 
