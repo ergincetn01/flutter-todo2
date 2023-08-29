@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   void saveNewTodo() {
     setState(() {
       db.todoList
-          .add(BasicTile(title: _controller.text, isDone: false, tiles: []));
+          .add(BasicTile(title: _controller.text, isDone: false,isChild: false));
       _controller.clear();
     });
 
@@ -32,15 +32,15 @@ class _HomePageState extends State<HomePage> {
 
   void deleteTask(int i) {
     setState(() {
-      basicTiles.removeAt(i);
+      db.todoList.removeAt(i);
     });
     db.updateDb();
   }
 
   void saveNestedTodo(int i) {
     setState(() {
-      db.todoList[i].tiles.add(
-          (BasicTile(title: _nestController.text, isDone: false, tiles: [])));
+      db.todoList.add(
+          (BasicTile(title: _nestController.text, isDone: false,isChild: true)));
       _nestController.clear();
     });
     db.updateDb();
@@ -103,16 +103,20 @@ class _HomePageState extends State<HomePage> {
     int index1 = db.todoList.indexOf(tile);
     return (Column(
       children: [
-        ListTile(
-          title: Text(tile.title),
-          trailing: IconButton(
-              onPressed: () {
-                createNestedTodo(index1);
-              },
-              icon: const Icon(
-                Icons.add,
-                color: Colors.green,
-              )),
+        Padding(
+          padding: tile.isChild? const EdgeInsets.only(left: 10.0) : EdgeInsets.zero,
+          child: ListTile(
+            
+            title: Text(tile.title),
+            trailing: IconButton(
+                onPressed: () {
+                  createNestedTodo(index1);
+                },
+                icon: const Icon(
+                  Icons.add,
+                  color: Colors.green,
+                )),
+          ),
         ),
       ],
     ));

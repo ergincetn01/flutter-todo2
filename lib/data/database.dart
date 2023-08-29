@@ -11,13 +11,7 @@ class Database {
   }
 
   void createInitialData() {
-    todoList = [
-      const BasicTile(title: "dvDDGGGG", isDone: false, tiles: []),
-      const BasicTile(title: "ev işleri", isDone: false, tiles: [
-        BasicTile(title: "ev işleri1", isDone: false, tiles: []),
-        BasicTile(title: "ev işleri2", isDone: false, tiles: [])
-      ])
-    ];
+    todoList = [];
     print("init...");
   }
 
