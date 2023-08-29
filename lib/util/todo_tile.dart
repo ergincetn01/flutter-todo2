@@ -21,16 +21,31 @@ class TodoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: isChild ? const EdgeInsets.only(left: 10.0) : EdgeInsets.zero,
-        child: Container(
-          padding: isChild ? const EdgeInsets.only(left: 20) : EdgeInsets.zero,
-          decoration: BoxDecoration(
-              color: isCompleted ? Colors.red : Colors.blue[200],
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(width: 2.0, color: Colors.black)),
-          child: ListTile(
-            title: Text(
-              taskName),
+        padding: isChild
+            ? const EdgeInsets.only(left: 20.0, top: 3, right: 3)
+            : const EdgeInsets.only(top: 5, left: 3, right: 3),
+        child: Slidable(
+          endActionPane: ActionPane(
+              extentRatio: 0.2,
+              motion: const StretchMotion(),
+              children: [
+                SlidableAction(
+                  borderRadius: BorderRadius.circular(10),
+                  onPressed: deleteTask,
+                  icon: Icons.delete,
+                  autoClose: true,
+                  backgroundColor: Colors.red,              
+                )
+              ]),
+          child: Container(
+            padding:
+                isChild ? const EdgeInsets.only(left: 20) : EdgeInsets.zero,
+            decoration: BoxDecoration(
+                color: isCompleted ? Colors.red : Colors.blue[200],
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 1.0, color: Colors.black)),
+            child: ListTile(
+              title: Text(taskName),
               trailing: isChild
                   ? null
                   : IconButton(
@@ -38,7 +53,6 @@ class TodoTile extends StatelessWidget {
                       icon: const Icon(
                         Icons.add,
                         color: Colors.green,
-                        
                       )),
               leading: Checkbox(
                 onChanged: onChanged,
@@ -46,6 +60,6 @@ class TodoTile extends StatelessWidget {
               ),
             ),
           ),
-        );
+        ));
   }
 }
