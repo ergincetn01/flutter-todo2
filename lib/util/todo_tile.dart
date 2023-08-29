@@ -34,7 +34,7 @@ class TodoTile extends StatelessWidget {
                   onPressed: deleteTask,
                   icon: Icons.delete,
                   autoClose: true,
-                  backgroundColor: Colors.red,              
+                  backgroundColor: Colors.red,
                 )
               ]),
           child: Container(
@@ -45,14 +45,21 @@ class TodoTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(width: 1.0, color: Colors.black)),
             child: ListTile(
-              title: Text(taskName),
+              title: Text(
+                taskName,
+                style: TextStyle(
+                    decoration: isCompleted
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none),
+              ),
               trailing: isChild
                   ? null
                   : IconButton(
+                    color: Colors.white,
                       onPressed: createChild,
                       icon: const Icon(
                         Icons.add,
-                        color: Colors.green,
+                        color: Color.fromARGB(255, 2, 20, 48),
                       )),
               leading: Checkbox(
                 onChanged: onChanged,

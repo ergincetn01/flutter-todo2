@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo2/data/database.dart';
 import 'package:todo2/util/basic_tile.dart';
 import 'package:todo2/util/modal_box.dart';
@@ -13,12 +12,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final _myBox = Hive.box('mybox');
-
   Database db = Database();
 
   final _controller = TextEditingController();
   final _nestController = TextEditingController();
+
+  void createNewTodo() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return ModalBox(
+              controller: _controller,
+              onSave: () {
+                if (_controller.text != "") {
+                  saveNewTodo();
+                } else {}
+              },
+              onCancel: () => handleCancel());
+        });
+  }
 
   void saveNewTodo() {
     setState(() {
@@ -31,11 +43,27 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
   }
 
-  void deleteTask(int i) {
+  void deleteTodo(int i) {
     setState(() {
       db.todoList.removeAt(i);
     });
     db.updateDb();
+  }
+
+  void createNestedTodo(int i) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return NestedModalBox(
+              controller: _nestController,
+              tileTitle: db.todoList[i].title,
+              onCancel: () => handleNestedTodoCancel(),
+              onSave: () {
+                if (_nestController.text != "") {
+                  saveNestedTodo(i);
+                } else {}
+              });
+        });
   }
 
   void saveNestedTodo(int i) {
@@ -47,34 +75,15 @@ class _HomePageState extends State<HomePage> {
     db.updateDb();
     Navigator.pop(context);
   }
-void handleCancel(){
-  Navigator.of(context).pop();
-  _controller.clear();
-}
-  void createNestedTodo(int i) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return NestedModalBox(
-              //nested dialog box component is reuquired (add new task to ${todoList[i].title})
-              controller: _nestController,
-              tileTitle: db.todoList[i].title,
-              onCancel: () => handleCancel(),
-              onSave: () {
-                saveNestedTodo(i);
-              });
-        });
+
+  void handleCancel() {
+    Navigator.of(context).pop();
+    _controller.clear();
   }
 
-  void createNewTask() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return ModalBox(
-              controller: _controller,
-              onSave: saveNewTodo,
-              onCancel: () => handleCancel());
-        });
+  void handleNestedTodoCancel() {
+    Navigator.of(context).pop();
+    _nestController.clear();
   }
 
   void checkboxChanged(bool? value, int index) {
@@ -88,11 +97,12 @@ void handleCancel(){
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.black,
           centerTitle: true,
           title: const Text("Todo app with Children"),
         ),
         floatingActionButton: FloatingActionButton(
-            onPressed: createNewTask, child: const Icon(Icons.add)),
+            onPressed: createNewTodo, child: const Icon(Icons.add)),
         body: Column(
           children: <Widget>[
             Flexible(
@@ -100,26 +110,26 @@ void handleCancel(){
                 itemCount: db.todoList.length,
                 itemBuilder: (BuildContext context, index) {
                   return TodoTile(
-                      taskName: db.todoList[index].title,
-                      isChild: db.todoList[index].isChild,
-                      createChild: () {
-                        createNestedTodo(index);
-                      },
-                      isCompleted: db.todoList[index].isDone,
-                      onChanged: (value) => checkboxChanged(value, index),
-                     deleteTask: (p0)=>
-                      deleteTask(index),
-                     );
+                    taskName: db.todoList[index].title,
+                    isChild: db.todoList[index].isChild,
+                    createChild: () {
+                      createNestedTodo(index);
+                    },
+                    isCompleted: db.todoList[index].isDone,
+                    onChanged: (value) => checkboxChanged(value, index),
+                    deleteTask: (p0) => deleteTodo(index),
+                  );
                 },
               ),
             ),
           ],
         ));
   }
+}
 
-//hivedb id atama (1dedn başalyarak sıralı şekilde artacak)
-//child ise "child-$id" şeklinde bir değer tutacak
 
+/*  --->  THESE METHODS ARE NO LONGER USED! <---
+  
   Widget buildTile(BasicTile tile) {
     int index1 = db.todoList.indexOf(tile);
     return (Column(
@@ -163,3 +173,4 @@ void handleCancel(){
     }));
   }
 }
+*/
