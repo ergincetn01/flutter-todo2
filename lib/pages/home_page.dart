@@ -37,10 +37,10 @@ class _HomePageState extends State<HomePage> {
   void saveNewTodo() {
     setState(() {
       db.todoList.add(
-          BasicTile(title: _controller.text, isDone: false, isChild: false));
-      _controller.clear();
+        BasicTile(title: _controller.text, isDone: false, isChild: false));
+        _controller.clear();
     });
-
+    
     db.updateDb();
     Navigator.pop(context);
   }
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
     _nestController.clear();
   }
 
-   void changeAncestor(int i) {
+  void changeAncestor(int i) {
     setState(() {
       ancestor = db.todoList[i].title;
     });
