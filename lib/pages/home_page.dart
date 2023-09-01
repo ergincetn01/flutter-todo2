@@ -17,6 +17,8 @@ class _HomePageState extends State<HomePage> {
   final _controller = TextEditingController();
   final _nestController = TextEditingController();
 
+  late String ancestor = "";
+
   void createNewTodo() {
     showDialog(
         context: context,
@@ -86,6 +88,12 @@ class _HomePageState extends State<HomePage> {
     _nestController.clear();
   }
 
+   void changeAncestor(int i) {
+    setState(() {
+      ancestor = db.todoList[i].title;
+    });
+  }
+
   void checkboxChanged(bool? value, int index) {
     setState(() {
       db.todoList[index].isDone = !db.todoList[index].isDone;
@@ -112,8 +120,10 @@ class _HomePageState extends State<HomePage> {
                   return TodoTile(
                     taskName: db.todoList[index].title,
                     isChild: db.todoList[index].isChild,
+                    childOf: ancestor,
                     createChild: () {
                       createNestedTodo(index);
+                      changeAncestor(index);
                     },
                     isCompleted: db.todoList[index].isDone,
                     onChanged: (value) => checkboxChanged(value, index),
