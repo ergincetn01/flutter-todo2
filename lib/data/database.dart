@@ -4,7 +4,7 @@ import 'package:todo2/util/basic_tile.dart';
 class Database {
   List<BasicTile> todoList = [];
 
-  final _myBox = Hive.box('mybox');
+  final _myBox = Hive.box('todo2box');
 
   void insertTodoItem(BasicTile tile) {
     todoList.add(tile);

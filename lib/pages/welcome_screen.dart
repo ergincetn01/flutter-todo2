@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:todo2/pages/home_screen.dart';
+import 'package:todo2/pages/todo_lists_screen.dart';
 import 'package:todo2/widgets/sidebar.dart';
-// import 'package:todoapp/screens/contact_us.dart';
+import 'package:todo2/pages/contact_us.dart';
 // import 'package:todoapp/screens/display_todos.dart';
 // import 'package:todoapp/screens/home_Page.dart';
 // import 'package:todoapp/screens/sidebar.dart';
@@ -19,9 +21,9 @@ class MainPageState extends State<WelcomeScreen> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    // HomePage(),
-    // TodoListPage(),
-    // ContactUs()
+    HomePage(),
+    TodoListPage(),
+    ContactUs(),
   ];
 
   void _onItemTapped(int index) {

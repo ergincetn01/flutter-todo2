@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo2/util/task_button.dart';
 
-
 class NestedModalBox extends StatelessWidget {
   final controller;
   final String tileTitle;
