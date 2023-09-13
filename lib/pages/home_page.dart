@@ -111,28 +111,32 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: createNewTodo, child: const Icon(Icons.add)),
-        body: Column(
-          children: <Widget>[
-            Flexible(
-              child: ListView.builder(
-                itemCount: db.todoList.length,
-                itemBuilder: (BuildContext context, index) {
-                  return TodoTile(
-                    taskName: db.todoList[index].title,
-                    isChild: db.todoList[index].isChild,
-                    childOf: ancestor,
-                    createChild: () {
-                      createNestedTodo(index);
-                      changeAncestor(index);
-                    },
-                    isCompleted: db.todoList[index].isDone,
-                    onChanged: (value) => checkboxChanged(value, index),
-                    deleteTask: (p0) => deleteTodo(index),
-                  );
-                },
+        body: 
+        Container(
+          padding:const EdgeInsets.only(top: 20, left: 5, right: 5),
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                child: ListView.builder(
+                  itemCount: db.todoList.length,
+                  itemBuilder: (BuildContext context, index) {
+                    return TodoTile(
+                      taskName: db.todoList[index].title,
+                      isChild: db.todoList[index].isChild,
+                      childOf: ancestor,
+                      createChild: () {
+                        createNestedTodo(index);
+                        changeAncestor(index);
+                      },
+                      isCompleted: db.todoList[index].isDone,
+                      onChanged: (value) => checkboxChanged(value, index),
+                      deleteTask: (p0) => deleteTodo(index),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ));
   }
 }
