@@ -131,17 +131,22 @@ class _TodoListState extends State<TodoListPage> {
             onPressed: createNewTask, child: const Icon(Icons.add)),
         body: db.todoList.isEmpty
             ? const Center(child: Text("You haven't added any todos!"))
-            : ListView.builder(
+            : 
+            Container(
+              padding: const EdgeInsets.only(top: 20, right: 5, left: 5),
+              child: ListView.builder(
                 itemCount: db.todoList.length,
                 itemBuilder: (context, index) {
                   return TodoTile(
-                      taskName: db.todoList[index].title,
-                      isCompleted: db.todoList[index].isDone,
-                      deleteTask: (context) {
-                        deleteTask(index);
-                        // deletePrompt(index);
-                      },
-                      onChanged: (value) => checkboxChanged(value, index));
-                }));
+                    taskName: db.todoList[index].title,
+                    isCompleted: db.todoList[index].isDone,
+                    deleteTask: (context) {
+                      deleteTask(index);
+                    },
+                    onChanged: (value) => checkboxChanged(value, index));
+                }),
+            )
+            
+                );
   }
 }

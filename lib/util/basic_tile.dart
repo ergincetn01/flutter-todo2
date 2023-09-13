@@ -3,12 +3,11 @@ import 'package:hive/hive.dart';
 class BasicTile {
   final String title;
   late bool isDone;
-  // final bool isChild;
 
-  BasicTile(
-      {required this.title, required this.isDone, 
-      // required this.isChild
-      });
+  BasicTile({
+    required this.title,
+    required this.isDone,
+  });
 }
 
 final basicTiles = <BasicTile>[];
@@ -21,7 +20,6 @@ class BasicTileAdapter extends TypeAdapter<BasicTile> {
   BasicTile read(BinaryReader reader) {
     final title = reader.readString();
     final isDone = reader.readBool();
-    // final isChild = reader.readBool();
 
     return BasicTile(title: title, isDone: isDone);
   }
@@ -30,7 +28,5 @@ class BasicTileAdapter extends TypeAdapter<BasicTile> {
   void write(BinaryWriter writer, BasicTile obj) {
     writer.writeString(obj.title);
     writer.writeBool(obj.isDone);
-    // writer.writeBool(obj.isChild);
-
   }
 }

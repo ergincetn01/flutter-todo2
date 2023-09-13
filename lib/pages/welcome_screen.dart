@@ -3,9 +3,6 @@ import 'package:todo2/pages/home_screen.dart';
 import 'package:todo2/pages/todo_lists_screen.dart';
 import 'package:todo2/widgets/sidebar.dart';
 import 'package:todo2/pages/contact_us.dart';
-// import 'package:todoapp/screens/display_todos.dart';
-// import 'package:todoapp/screens/home_Page.dart';
-// import 'package:todoapp/screens/sidebar.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key, required this.title});

@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> {
                 name: "uname",
                 decoration: const InputDecoration(
                   hintText: "Username",
+                  hintStyle: TextStyle(fontSize: 18),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       style: BorderStyle.solid,
@@ -73,13 +74,15 @@ class _HomePageState extends State<HomePage> {
                 }
               ),
             ),
-            Text(uNameController.text),
+            Text(uNameController.text, style: const TextStyle(fontSize: 24),),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: FormBuilderTextField(
                 name: "psw",
+                obscureText: true,
                 decoration: const InputDecoration(
                   hintText: "Password",
+                  hintStyle: TextStyle(fontSize: 18),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       style: BorderStyle.solid,
