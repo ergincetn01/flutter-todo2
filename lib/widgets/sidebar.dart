@@ -13,6 +13,7 @@ class Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: 200,
       backgroundColor: Colors.black,
       child: ListView(
         padding: EdgeInsets.zero,

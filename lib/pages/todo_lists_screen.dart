@@ -4,6 +4,8 @@ import 'package:todo2/data/database.dart';
 import 'package:todo2/util/basic_tile.dart';
 import 'package:todo2/util/modal_box.dart';
 import 'package:todo2/util/todo_tile.dart';
+import 'package:todo2/util/todotile_expansion.dart';
+import 'package:todo2/widgets/todoexpansion.dart';
 
 
 class TodoListPage extends StatefulWidget {
@@ -134,17 +136,28 @@ class _TodoListState extends State<TodoListPage> {
             : 
             Container(
               padding: const EdgeInsets.only(top: 20, right: 5, left: 5),
-              child: ListView.builder(
-                itemCount: db.todoList.length,
-                itemBuilder: (context, index) {
-                  return TodoTile(
-                    taskName: db.todoList[index].title,
-                    isCompleted: db.todoList[index].isDone,
-                    deleteTask: (context) {
-                      deleteTask(index);
-                    },
-                    onChanged: (value) => checkboxChanged(value, index));
-                }),
+              child: 
+              ListView(children: 
+                db.todoList.map(buildTile).toList()
+              ),
+              // ListView.builder(
+              //   itemCount: db.todoList.length,
+              //   itemBuilder: (context, index) {
+              //     return TodoTileExpansion(
+              //           taskName: db.todoList[index].title,
+              //       isCompleted: db.todoList[index].isDone,
+              //       deleteTask: (context) {
+              //         deleteTask(index);
+              //       },
+              //       onChanged: (value) => checkboxChanged(value, index));}),
+                  // return TodoTile(
+                  //   taskName: db.todoList[index].title,
+                  //   isCompleted: db.todoList[index].isDone,
+                  //   deleteTask: (context) {
+                  //     deleteTask(index);
+                  //   },
+                  //   onChanged: (value) => checkboxChanged(value, index));
+                
             )
             
                 );
